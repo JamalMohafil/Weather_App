@@ -266,6 +266,8 @@ transition: all 0.25s ease;
         form = document.querySelector('.search-part'),
         humIcon = document.querySelector('.text2 i'),
         tempIcon = document.querySelector('.text1 i')
+        let api;
+        const apiKey = '80fa7a57702bc12f1926c69f4effb487';
 
         let imgCont = document.querySelector('#imgCon')
 
@@ -273,9 +275,25 @@ transition: all 0.25s ease;
             console.log('err    ')
         })
 
-        async function getData(city){
-            const apiKey = '80fa7a57702bc12f1926c69f4effb487';
-            let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ar&units=metric&appid=${apiKey}`
+        
+        function getPos(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition((pos)=>{
+                    console.log(pos)
+                    console.log('erro')
+                    const {latitude,longitude} = pos.coords
+                    api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`
+                    getData()
+                })
+            }
+        }
+     
+     function onCity(city){
+        api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ar&units=metric&appid=${apiKey}`
+        getData()
+     }
+        window.onload = getPos()
+        async function getData(){
             let response = await fetch(api)
             let json = await response.json()
             
@@ -322,7 +340,7 @@ transition: all 0.25s ease;
 
         form.addEventListener('submit',(e)=>{
             e.preventDefault()
-            getData(search_input.value)
+            onCity(search_input.value)
 
         })
 
