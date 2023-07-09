@@ -282,7 +282,7 @@ transition: all 0.25s ease;
                     console.log(pos)
                     console.log('erro')
                     const {latitude,longitude} = pos.coords
-                    api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`
+                    api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&lang=ar&units=metric&appid=${apiKey}`
                     getData()
                 })
             }
