@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="shortcut icon" href="imgs/icon.png"/>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+</head>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Kufi Arabic', sans-serif;
+}
+.material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 48
+    }
+:root {
+    --main-color:#00b2ca;
+    --white-color:white;
+}
+.bold {
+    font-weight: 700;
+}
+body {
+
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('imgs/bg.jpg');
+    background-size: cover;
+    
+}
+.wrapper {
+    width: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background: rgba( 163, 170, 255, 0.55 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 4.5px );
+-webkit-backdrop-filter: blur( 4.5px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );    padding: 10px;
+    border-radius: 7px;
+}
+.wrapper .search-part {
+width: 100%;
+padding: 15px;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: all 0.25s ease;
+}
+
+.search-part input {
+    padding: 10px 13px;
+    border-radius: 5px;
+    border: 0.1px solid silver;
+    outline: 0;
+    width: 78%;
+
+}
+.search-part input:focus {
+    border: 0.1px solid #00101c;
+}
+.search-part input[type="search"]::-webkit-search-cancel-button {
+
+    font-size: 17px;
+    filter: brightness(0);
+    -webkit-filter: brightness(0);
+    background-color: white;
+    cursor: pointer;
+}
+.search-part button {
+    border-radius: 50%;
+        width: 40px;
+    height: 40px;
+    border: 0.1px solid silver;
+    outline: 0;
+    font-size:17px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+.search-part button:focus {
+    border: 0.1px solid #00101c;
+
+}
+.wrapper h2 {
+    position: relative;
+    font-weight: 600;
+    font-size: 22px;
+    margin-bottom: 8px;
+    
+    color: yellow;
+}
+.wrapper h2::before {
+    content: '';
+    width: 190%;
+    height: 2px;
+    background: var(--white-color);
+    position: absolute;
+    top: 129%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.wrapper .weather-part {
+    width: 100%;
+    padding: 8px 15px;
+    display: none;
+
+}
+.wrapper.active .weather-part {
+    display: block;
+}
+.weather-part .content img {
+    max-width: 125px;
+} 
+.weather-part .content .C , b {
+    font-size: 55px;
+    color: var(--white-color);
+    font-weight: 600;
+    margin-bottom: -25px;
+}
+.weather-part .content .haze {
+    font-size: 25px;
+    font-weight: 500;
+    color: #eee;
+}
+.weather-part .content .location {
+    margin: 10px 0;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    color: var(--white-color);
+}
+.content .location i {
+    font-size: 26px;
+    margin-right: 4px;
+}
+
+.wrapper .weather-part .content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.weather-part .bottom-details {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+
+.bottom-details .text1 {
+    width: 50%;
+    color: var(--white-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.text1::before {
+    content: '';
+    width: 2px;
+    height: 88px;
+    background: var(--white-color);
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(-50%,-50%);
+}
+.bottom-details .text2 {
+    width: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white-color);
+}
+.bottom-details .text1 i {
+    font-size: 36px;
+    color: #c3f8ff;
+    margin-left: 10px;
+}
+.bottom-details .text1 .details {
+    margin-left: 10px;
+}
+.bottom-details .text2 i {
+    font-size: 35px;
+    color: #c3f8ff;
+    margin-left: 10px;
+}
+.bottom-details .text2 .details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 7px;
+}
+</style>
+
+<body dir="rtl">
+    <div class="wrapper">
+        <h2>برنامج الطقس</h2>
+        <i class="fa-duotone fa-droplet-degree"></i>
+                <form class="search-part">
+        <input type="search" id="search-input" placeholder="ادخل اسم المدينة" style="margin-left:5px">
+        <button><i class="uil uil-search-alt"></i></button>
+        </form>
+        <section class="weather-part">
+         
+            <div class="content" style="direction: ltr !important;">
+                <img id="imgCon" src="" alt="">
+                <span class="C"><b>28</b> °C </span>
+                <span class="haze">Haze</span>
+                <div class="location"> <i class="uil uil-map-marker"></i>
+                <span class="country">Istanbul, TR</span></div>
+            </div>
+            <hr style="height:2px;margin-top:0px;background: #00101c;border: 0;margin-bottom:10px">
+            <div class="bottom-details" >
+                <div class="text1">
+                    <i class="material-symbols-outlined">air</i>
+                    <div class="details" >
+                        <div class="temp">
+                            <span class="numb bold" >3</span>
+                            <span class="deg" style="font-size: 13px;" >كم / ساعة</span>
+                        </div>
+                        <span>الرياح</span>
+                    </div>
+                </div>
+                <div class="text2">
+                    <i class="material-symbols-outlined">
+                        humidity_high
+                    </i>
+                    <div class="details">
+                        <span class="numb bold">28</span>
+                        <span>الرطوبة</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/brands.min.js" integrity="sha512-KYlRezs7yAa59UnX6zAvY7I96Te02kycQn02Sr6FU/fBpxcXAwumRe5DHVrqVnWTt9HY/PktrAPZzSe9UE1Yxg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+        let warpper = document.querySelector('.wrapper'),
+        search_input = document.getElementById('search-input'),
+        country = document.querySelector('.content .country'),
+        temp = document.querySelector('.content .C b'),
+        haze = document.querySelector('.content .haze')
+        numbTemp = document.querySelector('.text1 .details .temp .numb'),
+        humidity = document.querySelector('.text2 .details  .numb'),
+        form = document.querySelector('.search-part'),
+        humIcon = document.querySelector('.text2 i'),
+        tempIcon = document.querySelector('.text1 i')
+
+        let imgCont = document.querySelector('#imgCon')
+
+        humidity.addEventListener('click',()=>{
+            console.log('err    ')
+        })
+
+        async function getData(city){
+            const apiKey = '80fa7a57702bc12f1926c69f4effb487';
+            let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ar&units=metric&appid=${apiKey}`
+            let response = await fetch(api)
+            let json = await response.json()
+            
+            console.log(json)
+
+            temp.innerText = `${Math.floor(json.main.temp)}`
+            haze.innerText = `${json.weather[0].description}`
+            country.innerText = `${json.name}, ${json.sys.country}`
+            numbTemp.innerText = `${json.wind.speed}`
+            humidity.innerText = `${Math.floor(json.main.humidity)}`
+
+            if(json.main.humidity <= 20){
+                humIcon.innerText = `humidity_low`
+            }else if (json.main.humidity <=70 && json.main.humidity > 20){
+                humIcon.innerText = `humidity_mid`
+            }else if(json.main.humidity > 70){
+                humIcon.innerText = `humidity_high`
+            }
+           
+
+            let id = json.weather[0].id
+            console.log(id)
+            if(id == 800){
+                imgCont.src = 'imgs/clear.svg'
+            }
+            else if (id >= 701 && id <= 781){
+                imgCont.src = 'imgs/cloud.svg'
+            
+            }else if(id > 800){
+                imgCont.src = 'imgs/cloud.svg'
+
+            }
+            else if(id >= 600 && id <= 622){
+                imgCont.src = 'imgs/snow.svg'
+            }else if(id >= 500 && id <= 531){
+                imgCont.src = 'imgs/rain.svg'
+            }else if(id >=300 && id <= 321){
+                imgCont.src = 'imgs/drizzle.png'
+            }else if(id >= 200 && id <= 232){
+                imgCont.src = 'imgs/storm.svg'
+            }
+            warpper.classList.add('active')
+        }
+
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault()
+            getData(search_input.value)
+
+        })
+
+
+    </script>
+</body>
+</html>
