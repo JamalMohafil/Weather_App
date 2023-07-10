@@ -103,8 +103,11 @@ transition: all 0.25s ease;
     font-weight: 600;
     font-size: 22px;
     margin-bottom: 8px;
-    
+    display: none;
     color: yellow;
+}
+.wrapper.active h2 {
+    display: block;
 }
 .wrapper h2::before {
     content: '';
@@ -209,11 +212,44 @@ transition: all 0.25s ease;
     flex-direction: column;
     margin-left: 7px;
 }
+.get-loc {
+    padding: 8px 35px;
+    background: #00b2ca;
+    color: white;
+    border-radius: 8px;
+    border:1px solid transparent;
+    outline: 0;
+    cursor: pointer;
+    position: relative;
+    transition: 0.25s ease;
+}
+.get-loc:hover {
+    background: rgba( 255, 255, 255, 0.2 );
+backdrop-filter: blur( 6px );
+-webkit-backdrop-filter: blur( 6px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+    border: 1px solid #00b2ca;
+}
+.get-loc::before {
+    content: '';
+    width: 200%;
+    height: 2px;
+    background: #00b2ca;
+    position: absolute;
+    bottom: -10px;
+    right: -50%;
+}
+.wrapper.active .get-loc {
+    display: none;
+}
 </style>
 
 <body dir="rtl">
     <div class="wrapper">
         <h2>برنامج الطقس</h2>
+        <button class="get-loc">البحث في موقعك</button>
+        <hr>
         <i class="fa-duotone fa-droplet-degree"></i>
                 <form class="search-part">
         <input type="search" id="search-input" placeholder="ادخل اسم المدينة" style="margin-left:5px">
@@ -268,6 +304,7 @@ transition: all 0.25s ease;
         humIcon = document.querySelector('.text2 i'),
         tempIcon = document.querySelector('.text1 i')
         let api;
+        let locSearch = document.querySelector('.get-loc')
         const apiKey = '80fa7a57702bc12f1926c69f4effb487';
 
         let imgCont = document.querySelector('#imgCon')
@@ -319,6 +356,8 @@ transition: all 0.25s ease;
 
                    
         })
+                },()=>{
+                    alert('الرجاء تفعيل الموقع')
                 })
             }
             
@@ -328,7 +367,9 @@ transition: all 0.25s ease;
         api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ar&units=metric&appid=${apiKey}`
         getData()
      }
-       window.onload = getPos()
+      
+
+     locSearch.addEventListener('click',getPos)
         async function getData(){
             
             let response = await fetch(api)
@@ -391,7 +432,6 @@ window.addEventListener('load',findState)
             onCity(search_input.value)
 
         })
-
 
     </script>
 </body>
