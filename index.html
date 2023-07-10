@@ -46,6 +46,7 @@ body {
 .wrapper {
     width: 400px;
     display: flex;
+    position: relative;
     align-items: center;
     flex-direction: column;
     background: rgba( 163, 170, 255, 0.55 );
@@ -243,10 +244,23 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );
 .wrapper.active .get-loc {
     display: none;
 }
+.back {
+    position: absolute;
+    top: 0%;
+    left: 2%;
+    transform: translate(2%,-2%);
+    font-size: 35px;
+    cursor: pointer;
+    display: none;
+}
+.wrapper.active .back {
+    display: block;
+}
 </style>
 
 <body dir="rtl">
     <div class="wrapper">
+        <i class="back uil uil-arrow-left"></i>
         <h2>برنامج الطقس</h2>
         <button class="get-loc">البحث في موقعك</button>
         <hr>
@@ -432,7 +446,9 @@ window.addEventListener('load',findState)
             onCity(search_input.value)
 
         })
-
+        document.querySelector('.back').addEventListener('click',()=>{
+            warpper.classList.remove('active')
+        })
     </script>
 </body>
 </html>
